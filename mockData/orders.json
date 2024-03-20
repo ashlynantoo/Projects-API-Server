@@ -1,0 +1,38 @@
+[
+  {
+    "tax": 399,
+    "shippingFee": 499,
+    "items": [
+      {
+        "name": "accent chair",
+        "price": 25999,
+        "image": "https://dl.airtable.com/.attachmentThumbnails/e8bc3791196535af65f40e36993b9e1f/438bd160",
+        "quantity": 4,
+        "color": "#0000ff",
+        "product": "65f8c1374732032f1e258549"
+      }
+    ]
+  },
+  {
+    "tax": 499,
+    "shippingFee": 799,
+    "items": [
+      {
+        "name": "emperor bed",
+        "price": 23999,
+        "image": "https://dl.airtable.com/.attachmentThumbnails/0446e84c5bca9643de3452a61b2d6195/1b32f48b",
+        "quantity": 2,
+        "color": "#000",
+        "product": "65f8c1964732032f1e25854e"
+      },
+      {
+        "name": "armchair",
+        "price": 12599,
+        "image": "https://dl.airtable.com/.attachmentThumbnails/530c07c5ade5acd9934c8dd334458b86/cf91397f",
+        "quantity": 8,
+        "color": "#000",
+        "product": "65f8c1744732032f1e25854c"
+      }
+    ]
+  }
+]
