@@ -1,6 +1,6 @@
-## Ecommerce-API
+## Comfy Store-API
 
-[Ecommerce-API](https://ecommerce-api-v292.onrender.com)
+[Comfy Store-API](https://ecommerce-api-v292.onrender.com)
 
 #### Steps
 
@@ -8,44 +8,48 @@
 npm install && npm start
 ```
 
-- visit url http://localhost:3000
+- visit url http://localhost:5000
 
 #### Auth
 
 - Register User
+- Verify Email
 - Login User
+- Forgot Password
+- Reset Password
 - Logout User
 
 #### User
 
 - Get All Users
-- Get User
+- Get Single User
 - Get Current User
-- Update User
+- Update User Name and Email
 - Update User Password
 
 #### Product
 
-- Get All Products
-- Get Single Product Reviews
-- Add Product
 - Upload Product Image
-- Get Product
+- Add Product
+- Get All Products
+- Get Filtered Products
+- Get Single Product
+- Get Single Product Reviews
 - Update Product
 - Delete Product
 
 #### Review
 
-- Get Review
-- Get All Reviews
 - Add Review
+- Get All Reviews
+- Get Single Review
 - Update Review
 - Delete Review
 
 #### Order
 
-- Get Order
+- Add Order
 - Get All Orders
 - Get Current User Orders
-- Add Order
+- Get Single Order
 - Update Order

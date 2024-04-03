@@ -1,5 +1,6 @@
 const { StatusCodes } = require("http-status-codes");
 const User = require("../models/User");
+const Token = require("../models/Token");
 const CustomError = require("../errors");
 const {
   createJWTPayload,
@@ -37,7 +38,7 @@ const updateUser = async (req, res) => {
   const { userId } = req.user;
 
   if (!name || !email) {
-    throw new CustomError.BadRequestError("Please provide all details");
+    throw new CustomError.BadRequestError("Please provide name and email ID");
   }
 
   const user = await User.findByIdAndUpdate(
@@ -50,7 +51,8 @@ const updateUser = async (req, res) => {
   );
 
   const payload = createJWTPayload(user);
-  attachCookiesToResponse(res, payload);
+  const token = await Token.findOne({ user: userId });
+  attachCookiesToResponse(res, payload, token.refreshToken);
   res.status(StatusCodes.OK).json({ user: payload });
 };
 

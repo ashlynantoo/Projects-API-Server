@@ -33,6 +33,14 @@ const UserSchema = new mongoose.Schema({
     },
     default: "user",
   },
+  verificationToken: String,
+  isVerified: {
+    type: Boolean,
+    default: false,
+  },
+  verifiedOn: Date,
+  passwordToken: String,
+  passwordTokenExpiresOn: Date,
 });
 
 UserSchema.pre("save", async function () {

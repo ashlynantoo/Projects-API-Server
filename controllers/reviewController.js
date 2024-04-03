@@ -5,13 +5,15 @@ const CustomError = require("../errors");
 
 const addReview = async (req, res) => {
   const { product: productId } = req.body;
+  const { userId } = req.user;
+
   const isValidProduct = await Product.findById(productId);
   if (!isValidProduct) {
     throw new CustomError.NotFoundError(`No product with Id ${productId}`);
   }
 
   const isReviewAlreadySubmitted = await Review.findOne({
-    user: req.user.userId,
+    user: userId,
     product: productId,
   });
   if (isReviewAlreadySubmitted) {
@@ -20,7 +22,7 @@ const addReview = async (req, res) => {
     );
   }
 
-  req.body.user = req.user.userId;
+  req.body.user = userId;
   const review = await Review.create(req.body);
 
   res.status(StatusCodes.CREATED).json({ review });

@@ -1,27 +1,27 @@
 const CustomError = require("../errors");
-const { isJWTValid } = require("../utils");
+const { isJWTValid, attachCookiesToResponse } = require("../utils");
+const Token = require("../models/Token");
 
 const authenticateUser = async (req, res, next) => {
-  let token = null;
+  const { accessToken, refreshToken } = req.signedCookies;
 
-  //check header
-  const authHeader = req.headers.authorization;
-  if (authHeader && authHeader.startsWith("Bearer ")) {
-    token = authHeader.split(" ")[1];
-  }
-
-  //check cookies
-  else if (req.signedCookies.token) {
-    token = req.signedCookies.token;
-  }
-
-  if (!token) {
-    throw new CustomError.UnauthenticatedError("Authentication failed!");
-  }
   try {
-    const payload = isJWTValid(token);
-    const { name, userId, role } = payload;
-    req.user = { name, userId, role };
+    if (accessToken) {
+      const payload = isJWTValid(accessToken);
+      req.user = payload;
+    } else {
+      const data = isJWTValid(refreshToken);
+      const { userId } = data.payload;
+      const token = await Token.findOne({
+        user: userId,
+        refreshToken: data.refreshToken,
+      });
+      if (!token || token?.isValid === false) {
+        throw new CustomError.UnauthenticatedError("Authentication failed!");
+      }
+      attachCookiesToResponse(res, data.payload, token.refreshToken);
+      req.user = data.payload;
+    }
     next();
   } catch (error) {
     throw new CustomError.UnauthenticatedError("Authentication failed!");
