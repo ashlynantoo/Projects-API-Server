@@ -1,47 +1,36 @@
+require("dotenv").config();
 const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
-const UserSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, "Please provide the name"],
-    minlength: [3, "Name should be at least 3 characters"],
-    maxlength: [50, "Name should not exceed 50 characters"],
-    trim: true,
-  },
-  email: {
-    type: String,
-    required: [true, "Please provide the email ID"],
-    validate: {
-      validator: validator.isEmail,
-      message: "Please provide a valid email ID",
+const UserSchema = new mongoose.Schema(
+  {
+    username: {
+      type: String,
+      required: [true, "Please provide the username"],
+      minlength: [3, "Name should be at least 3 characters"],
+      maxlength: [50, "Name should not exceed 50 characters"],
+      trim: true,
     },
-    trim: true,
-    unique: true,
-  },
-  password: {
-    type: String,
-    required: [true, "Please provide the password"],
-    minlength: [6, "Password should be at least 6 characters"],
-  },
-  role: {
-    type: String,
-    enum: {
-      values: ["admin", "user"],
-      message: "Role '{VALUE}' is not supported",
+    email: {
+      type: String,
+      required: [true, "Please provide the email ID"],
+      validate: {
+        validator: validator.isEmail,
+        message: "Please provide a valid email ID",
+      },
+      trim: true,
+      unique: true,
     },
-    default: "user",
+    password: {
+      type: String,
+      required: [true, "Please provide the password"],
+      minlength: [6, "Password should be at least 6 characters"],
+    },
   },
-  verificationToken: String,
-  isVerified: {
-    type: Boolean,
-    default: false,
-  },
-  verifiedOn: Date,
-  passwordToken: String,
-  passwordTokenExpiresOn: Date,
-});
+  { timestamps: true }
+);
 
 UserSchema.pre("save", async function () {
   if (!this.isModified("password")) return;
@@ -52,6 +41,14 @@ UserSchema.pre("save", async function () {
 UserSchema.methods.comparePassword = async function (userPassword) {
   const isMatching = await bcrypt.compare(userPassword, this.password);
   return isMatching;
+};
+
+UserSchema.methods.createJWT = function () {
+  return jwt.sign(
+    { userId: this._id, name: this.username },
+    process.env.JWT_SECRET,
+    { expiresIn: process.env.JWT_LIFETIME }
+  );
 };
 
 const User = mongoose.model("User", UserSchema);

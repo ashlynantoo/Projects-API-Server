@@ -17,16 +17,22 @@ const ProductSchema = new mongoose.Schema(
       required: [true, "Please provide the product description"],
       maxlength: [1000, "Product description can't exceed 1000 characters"],
     },
-    image: {
-      type: String,
+    images: {
+      type: [],
       required: true,
-      default: "/uploads/example.jpeg",
     },
     category: {
       type: String,
       required: [true, "Please provide the product category"],
       enum: {
-        values: ["office", "kitchen", "bedroom"],
+        values: [
+          "office",
+          "kitchen",
+          "bedroom",
+          "living room",
+          "dining",
+          "kids",
+        ],
         message: "Product category '{VALUE}' is not supported",
       },
     },
@@ -34,7 +40,7 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please provide the product company"],
       enum: {
-        values: ["ikea", "liddy", "marcos"],
+        values: ["ikea", "liddy", "marcos", "caressa"],
         message: "Product company '{VALUE}' is not supported",
       },
     },
@@ -63,26 +69,9 @@ const ProductSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    createdOrUpdatedBy: {
-      type: mongoose.Types.ObjectId,
-      ref: "User",
-      required: [true, "User details not available"],
-    },
   },
-  { timestamps: true, toJSON: { virtuals: true }, toObject: { virtuals: true } }
+  { timestamps: true }
 );
-
-ProductSchema.virtual("reviews", {
-  ref: "Review",
-  localField: "_id",
-  foreignField: "product",
-  justOne: false,
-  // match: { rating: 5 },
-});
-
-ProductSchema.pre("deleteOne", { document: true }, async function () {
-  await this.model("Review").deleteMany({ product: this._id });
-});
 
 const Product = mongoose.model("Product", ProductSchema);
 

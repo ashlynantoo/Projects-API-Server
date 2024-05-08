@@ -46,22 +46,18 @@ const OrderSchema = new mongoose.Schema(
       type: Number,
       required: [true, "Please provide the total amount"],
     },
-    orderItems: {
+    orderedItems: {
       type: [CartSchema],
-      required: [true, "Please provide the order items"],
-    },
-    status: {
-      type: String,
-      enum: {
-        values: ["pending", "failed", "paid", "delivered", "cancelled"],
-        message: "Order status '{VALUE}' is not supported",
-      },
-      default: "pending",
+      required: [true, "Please provide the ordered items"],
     },
     orderedBy: {
       type: mongoose.Types.ObjectId,
       ref: "User",
       required: [true, "User details not available"],
+    },
+    shippingAddress: {
+      type: String,
+      required: [true, "Please provide the shipping address"],
     },
     clientSecret: {
       type: String,
@@ -69,6 +65,11 @@ const OrderSchema = new mongoose.Schema(
     },
     paymentIntentId: {
       type: String,
+      required: [true, "Please provide the stripe payment intent Id"],
+    },
+    status: {
+      type: String,
+      required: [true, "Please provide the stripe payment status"],
     },
   },
   { timestamps: true }
