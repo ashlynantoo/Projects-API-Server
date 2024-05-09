@@ -1,6 +1,6 @@
 ## Projects API Server
 
-[Projects API Server](https://ecommerce-store-server-rkso.onrender.com)
+[Projects API Server](https://projects-api-server.onrender.com)
 
 #### Steps
 
